@@ -1,0 +1,22 @@
+[smartos]
+marge.in-ulm.de:2022
+
+[smartos:vars]
+ansible_python_interpreter=/opt/tools/bin/python
+nic_tag=public0
+zone_resolvers=217.10.10.250
+mac='00:0a:05:02:17:18' # 10.5.2.22/24
+zone_search_domain=tfu.home.arpa
+kvm_name=arch-test
+vnc_port='40008'
+install_iso_download_folder=/magneto/big-public-files/isos
+install_iso_url='http://ftp-stud.hs-esslingen.de/pub/Mirrors/archlinux/iso/2019.09.01/archlinux-2019.09.01-x86_64.iso'
+install_iso_sha1=67cf5460beb42230a9c07fd6ebc136cbb1181948
+
+[archiso]
+arch-test ansible_host=localhost ansible_port=2222
+
+[archiso:vars]
+hostname=arch-test
+domain=tfu.home.arpa
+install_quemu_guest_agent=true

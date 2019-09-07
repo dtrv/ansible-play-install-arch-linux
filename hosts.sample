@@ -1,0 +1,15 @@
+[archiso]
+example.host
+#example.host ansible_host=<IP>   # if target has no DNS record 
+#example.host ansible_port=<PORT> # if target's sshd is not on 22 
+
+[archiso:vars]
+hostname=<HOSTNAME>
+domain=<DOMAIN>
+#os_disk=<DEVICE>                 # default 'vda'
+#os_fstype=<FSTYPE>               # default 'ext4'
+#timezone=<TIMEZONE>              # default 'Europe/Berlin'
+#language_locale=<LOCALE>         # default 'en_US.UTF-8'
+#mirrorlist_country=<ISO 3166-1>  # default 'DE'
+#os_packages=<packages>           # default none, example: 'salt' or '["rsync", "unzip"]' - keep all quotes!
+#install_quemu_guest_agent=<BOOL> # default 'false'

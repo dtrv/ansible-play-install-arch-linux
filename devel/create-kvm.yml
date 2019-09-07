@@ -1,0 +1,73 @@
+---
+
+- hosts: smartos
+
+  pre_tasks:
+    - name: destroy kvm
+      when: rebuild|default(false)
+      vmadm:
+        alias: "{{ kvm_name }}"
+        state: absent
+
+  tasks:
+    - name: create kvm
+      vmadm:
+        brand: kvm
+        alias: "{{ kvm_name }}"
+        cpu_type: host
+        disk_driver: virtio
+        disks: 
+          - size: 15000
+            boot: true
+        nics:
+          - mac: "{{ mac }}"
+            primary: true
+            ips: [ "dhcp" ]
+            nic_tag: "{{ nic_tag }}"
+            model: virtio
+        ram: "{{ ram|default(4096) }}"
+        state: present
+        vcpus: "{{ vcpus|default(2) }}"
+        vnc_port: "{{ vnc_port }}"
+      register: kvm
+
+    - debug: var=kvm
+  
+    - name: stop kvm to reboot with install iso
+      vmadm:
+        brand: kvm
+        alias: "{{ kvm_name }}"
+        force: true
+        state: stopped
+
+    - name: ensure dest folder for install iso exist
+      file:
+        path: "{{ install_iso_download_folder }}"
+        state: directory
+
+    - name: get install iso
+      get_url:
+        url: "{{ install_iso_url }}"
+        dest: "{{ install_iso_download_folder }}/{{ install_iso_url|basename }}"
+        tmp_dest: /tmp
+        checksum: "sha1:{{ install_iso_sha1 }}"
+
+    - name: copy install iso to kvm
+      copy:
+        remote_src: true
+        src: "{{ install_iso_download_folder }}/{{ install_iso_url|basename }}"
+        dest: "/zones/{{ kvm.uuid }}/root/boot.iso"
+
+    - name: start kvm
+      shell: "vmadm boot {{ kvm.uuid }} order=cd,once=d cdrom=/boot.iso,ide"
+
+    - name: collect vnc info
+      command: "vmadm info {{ kvm.uuid }} vnc"
+      changed_when: false
+      register: kvm_vnc
+
+    - debug:
+        msg: "{{ kvm_vnc.stdout }}"
+
+    - debug:
+        msg: "ssh-tunnel to vnc-port, set root passwd, start sshd, ssh-copy-id and play site.yml"
