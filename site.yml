@@ -3,166 +3,166 @@
 - hosts: archiso
 
   tasks:
-#    - name: Update the system clock
-#      command: timedatectl set-ntp true
-#
-#    - name: Partition the disks
-#      parted:
-#        device: "/dev/{{ os_disk|default('vda') }}"
-#        number: 1
-#        label: msdos
-#        state: present
-#
-#    - name: Format the partitions
-#      filesystem:
-#        device: "/dev/{{ os_disk|default('vda') }}1"
-#        fstype: "{{ os_fstype|default('ext4') }}"
-#
-#    - name: mount os disk
-#      mount:
-#        src: "/dev/{{ os_disk|default('vda') }}1"
-#        path: /mnt
-#        fstype: "{{ os_fstype|default('ext4') }}"
-#        state: mounted
-#
-#    - name: Select the mirrors
-#      block: 
-#      - name: install packages
-#        pacman:
-#          update_cache: true
-#          name:
-#            - pacman-contrib
-#  
-#      - name: get pacman mirrors
-#        get_url: 
-#          url: "https://www.archlinux.org/mirrorlist/?country={{ mirrorlist_country|default('DE') }}&protocol=https&ip_version=4"
-#          dest: /etc/pacman.d/mirrorlist
-#          force: true
-#  
-#      - name: enable mirrors
-#        replace:
-#          path: /etc/pacman.d/mirrorlist
-#          regexp: '^#Server'
-#          replace: 'Server'
-#  
-#      - name: rank mirrors
-#        command: rankmirrors -n 10 --max-time 2 /etc/pacman.d/mirrorlist
-#        register: ranked_mirrors
-#  
-#      - name: create ranked mirrorlist
-#        copy:
-#          dest: /etc/pacman.d/mirrorlist.ranked
-#          content: "{{ ranked_mirrors.stdout }}\n"
-#  
-#      - name: put ranked mirrorlist in place
-#        copy:
-#          remote_src: true
-#          src: /etc/pacman.d/mirrorlist.ranked
-#          dest: /etc/pacman.d/mirrorlist
-#          backup: true
-#      rescue:
-#      - fail:
-#          msg: "{{ ansible_failed_task }} failed"
-#
-#    - name: Install the base packages
-#      command: pacstrap /mnt base syslinux openssh haveged python
-#
-#    - name: generate fstab
-#      command: genfstab -U /mnt
-#      register: fstab
-#
-#    - name: create fstab
-#      copy:
-#        dest: /mnt/etc/fstab
-#        content: "{{ fstab.stdout }}\n"
-#
-#    - name: use ranked mirrorlist
-#      copy:
-#        remote_src: true
-#        src: /etc/pacman.d/mirrorlist.ranked
-#        dest: /mnt/etc/pacman.d/mirrorlist
-#
-#    - name: Network configuration | hostname
-#      copy:
-#        dest: /mnt/etc/hostname
-#        content: "{{ hostname }}"
-#
-#    - name: Network configuration | hosts
-#      blockinfile:
-#        path: /mnt/etc/hosts
-#        block: |
-#          127.0.0.1 localhost
-#          ::1       localhost
-#          127.0.1.1 {{ hostname }}.{{ domain }} {{ hostname }}
-#
-#    - name: fetch root's shadow credentials
-#      command: grep ^root /etc/shadow
-#      register: rootshadow
-#
-#    - name: set root's shadow credentials
-#      lineinfile:
-#        path: /mnt/etc/shadow
-#        line: "{{ rootshadow.stdout_lines[0] }}"
-#        regexp: "^root"
-#
-#    - name: create root's .ssh
-#      file:
-#        path: /mnt/root/.ssh
-#        state: directory
-#        mode: 0700
-#
-#    - name: copy root's authorized keys
-#      copy:
-#        remote_src: true
-#        src: /root/.ssh/authorized_keys
-#        dest: /mnt/root/.ssh/authorized_keys
-#        mode: 0600
-#
-#    - name: enable sshd
-#      command: arch-chroot /mnt systemctl enable sshd
-#
-#    - name: enable haveged
-#      command: arch-chroot /mnt systemctl enable haveged
-#
-#    - name: enable dhcpcd
-#      command: arch-chroot /mnt systemctl enable dhcpcd
-#
-#    - name: configure bootloader
-#      replace:
-#        path: /mnt/boot/syslinux/syslinux.cfg
-#        regexp: '(\s+)APPEND root=.*$'
-#        replace: '\1APPEND root=/dev/{{ os_disk|default("vda") }}1 rw'
-#
-#    - name: install bootloader
-#      command: arch-chroot /mnt syslinux-install_update -i -m -a
-#
-#    - reboot:
-#
-#    - name: set LANG
-#      become: true
-#      copy:
-#        dest: /etc/locale.conf
-#        content: "LANG={{ language_locale|default('en_US.UTF-8') }}"
-#
-#    - name: generate locale
-#      become: true
-#      locale_gen:
-#        name: "{{ language_locale|default('en_US.UTF-8') }}"
-#        state: present
-#
-#    - name: set timezone
-#      become: true
-#      file:
-#        state: link
-#        dest: /etc/localtime
-#        src: "/usr/share/zoneinfo/{{ timezone|default('Europe/Berlin') }}"
-#        force: true
-#
-#    - name: run pacman Syu | just to update cache
-#      pacman:
-#        update_cache: yes
-#        upgrade: yes
-#
+    - name: Update the system clock
+      command: timedatectl set-ntp true
+
+    - name: Partition the disks
+      parted:
+        device: "/dev/{{ os_disk|default('vda') }}"
+        number: 1
+        label: msdos
+        state: present
+
+    - name: Format the partitions
+      filesystem:
+        device: "/dev/{{ os_disk|default('vda') }}1"
+        fstype: "{{ os_fstype|default('ext4') }}"
+
+    - name: mount os disk
+      mount:
+        src: "/dev/{{ os_disk|default('vda') }}1"
+        path: /mnt
+        fstype: "{{ os_fstype|default('ext4') }}"
+        state: mounted
+
+    - name: Select the mirrors
+      block: 
+      - name: install packages
+        pacman:
+          update_cache: true
+          name:
+            - pacman-contrib
+  
+      - name: get pacman mirrors
+        get_url: 
+          url: "https://www.archlinux.org/mirrorlist/?country={{ mirrorlist_country|default('DE') }}&protocol=https&ip_version=4"
+          dest: /etc/pacman.d/mirrorlist
+          force: true
+  
+      - name: enable mirrors
+        replace:
+          path: /etc/pacman.d/mirrorlist
+          regexp: '^#Server'
+          replace: 'Server'
+  
+      - name: rank mirrors
+        command: rankmirrors -n 10 --max-time 2 /etc/pacman.d/mirrorlist
+        register: ranked_mirrors
+  
+      - name: create ranked mirrorlist
+        copy:
+          dest: /etc/pacman.d/mirrorlist.ranked
+          content: "{{ ranked_mirrors.stdout }}\n"
+  
+      - name: put ranked mirrorlist in place
+        copy:
+          remote_src: true
+          src: /etc/pacman.d/mirrorlist.ranked
+          dest: /etc/pacman.d/mirrorlist
+          backup: true
+      rescue:
+      - fail:
+          msg: "{{ ansible_failed_task }} failed"
+
+    - name: Install the base packages
+      command: pacstrap /mnt base syslinux openssh haveged python
+
+    - name: generate fstab
+      command: genfstab -U /mnt
+      register: fstab
+
+    - name: create fstab
+      copy:
+        dest: /mnt/etc/fstab
+        content: "{{ fstab.stdout }}\n"
+
+    - name: use ranked mirrorlist
+      copy:
+        remote_src: true
+        src: /etc/pacman.d/mirrorlist.ranked
+        dest: /mnt/etc/pacman.d/mirrorlist
+
+    - name: Network configuration | hostname
+      copy:
+        dest: /mnt/etc/hostname
+        content: "{{ hostname }}"
+
+    - name: Network configuration | hosts
+      blockinfile:
+        path: /mnt/etc/hosts
+        block: |
+          127.0.0.1 localhost
+          ::1       localhost
+          127.0.1.1 {{ hostname }}.{{ domain }} {{ hostname }}
+
+    - name: fetch root's shadow credentials
+      command: grep ^root /etc/shadow
+      register: rootshadow
+
+    - name: set root's shadow credentials
+      lineinfile:
+        path: /mnt/etc/shadow
+        line: "{{ rootshadow.stdout_lines[0] }}"
+        regexp: "^root"
+
+    - name: create root's .ssh
+      file:
+        path: /mnt/root/.ssh
+        state: directory
+        mode: 0700
+
+    - name: copy root's authorized keys
+      copy:
+        remote_src: true
+        src: /root/.ssh/authorized_keys
+        dest: /mnt/root/.ssh/authorized_keys
+        mode: 0600
+
+    - name: enable sshd
+      command: arch-chroot /mnt systemctl enable sshd
+
+    - name: enable haveged
+      command: arch-chroot /mnt systemctl enable haveged
+
+    - name: enable dhcpcd
+      command: arch-chroot /mnt systemctl enable dhcpcd
+
+    - name: configure bootloader
+      replace:
+        path: /mnt/boot/syslinux/syslinux.cfg
+        regexp: '(\s+)APPEND root=.*$'
+        replace: '\1APPEND root=/dev/{{ os_disk|default("vda") }}1 rw'
+
+    - name: install bootloader
+      command: arch-chroot /mnt syslinux-install_update -i -m -a
+
+    - reboot:
+
+    - name: set LANG
+      become: true
+      copy:
+        dest: /etc/locale.conf
+        content: "LANG={{ language_locale|default('en_US.UTF-8') }}"
+
+    - name: generate locale
+      become: true
+      locale_gen:
+        name: "{{ language_locale|default('en_US.UTF-8') }}"
+        state: present
+
+    - name: set timezone
+      become: true
+      file:
+        state: link
+        dest: /etc/localtime
+        src: "/usr/share/zoneinfo/{{ timezone|default('Europe/Berlin') }}"
+        force: true
+
+    - name: run pacman Syu | just to update cache
+      pacman:
+        update_cache: yes
+        upgrade: yes
+
     - name: setup qemu-guest-agent
       when: install_qemu_guest_agent|default(false)
       block:
