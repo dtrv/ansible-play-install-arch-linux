@@ -3,7 +3,7 @@ Setup a new installation of Arch Linux.
 
 This playbook is intended to run against an arch linux live iso
 to bootstrap an "fresh" arch linux system as basis for further 
-configurations. This play is i**not idempotent**.
+configurations. This play is **not idempotent**.
 
 It automates most of the steps from the 
 [Installation guide](https://wiki.archlinux.org/index.php/Installation_guide).
@@ -31,7 +31,7 @@ itself. But here the main steps:
  
 - prepare disk (msdos label, one partition, no swap, `/etc/fstab`)
 - create a ranked mirrorlist (country configurable, default 'DE')
-- bootstrap arch-linux (base + sshd and python for ansible)
+- bootstrap arch-linux (base, linux kernel, sshd and python for ansible)
 - enable remote ssh login for root (copy password and `authorized_keys` from live system)
 - Network stuff (`/etc/hostname`, `/etc/hosts`, `dhcpcd.service`)
 - reboot into new installed arch linux
