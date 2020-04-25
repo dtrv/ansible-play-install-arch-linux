@@ -1,7 +1,8 @@
 [archiso]
-example.host
-#example.host ansible_host=<IP>   # if target has no DNS record 
-#example.host ansible_port=<PORT> # if target's sshd is not on 22 
+doesnt.matter ansible_host=<IP>   # host will reboot during deployment.
+                                  # if you boot archiso the hostname is 'archiso'. 
+                                  # make sure it's accessable even if hostname
+                                  # changes! best is to use IP address.
 
 [archiso:vars]
 hostname=<HOSTNAME>
