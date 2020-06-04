@@ -166,7 +166,7 @@
         upgrade: yes
 
     - name: setup qemu-guest-agent
-      when: install_qemu_guest_agent|bool|default(false)
+      when: install_qemu_guest_agent|default(false)|bool
       block:
       - name: install qemu-guest-agent
         pacman:

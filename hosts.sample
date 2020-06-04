@@ -4,7 +4,7 @@ doesnt.matter ansible_host=<IP>   # host will reboot during deployment.
                                   # make sure it's accessable even if hostname
                                   # changes! best is to use IP address.
 
-[archiso:vars]
+[archiso:vars] # quote values or remove comments!
 hostname=<HOSTNAME>
 domain=<DOMAIN>
 #os_disk=<DEVICE>                 # default 'vda'
@@ -13,4 +13,4 @@ domain=<DOMAIN>
 #language_locale=<LOCALE>         # default 'en_US.UTF-8'
 #mirrorlist_country=<ISO 3166-1>  # default 'DE'
 #os_packages=<packages>           # default none, example: 'salt' or '["rsync", "unzip"]' - keep all quotes!
-#install_quemu_guest_agent=<BOOL> # default 'false'
+#install_qemu_guest_agent=<BOOL>  # default 'false'
