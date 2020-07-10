@@ -14,3 +14,9 @@ domain=<DOMAIN>
 #mirrorlist_country=<ISO 3166-1>  # default 'DE'
 #os_packages=<packages>           # default none, example: 'salt' or '["rsync", "unzip"]' - keep all quotes!
 #install_qemu_guest_agent=<BOOL>  # default 'false'
+
+# without dhcp one have to provide static network configuration.
+# example below. default is '', i.e. network configuration via dhcp
+#dhcpcd_content="interface ens18\nstatic ip_address=192.168.2.3/24\nstatic routers=192.168.2.1\nstatic domain_name_servers=192.168.2.250 8.8.8.8"
+
+# vi: ft=dosini
