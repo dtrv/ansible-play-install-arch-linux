@@ -180,7 +180,7 @@
 
       - name: start and enable qemu-guest-agent
         systemd:
-          name: qemu-ga.service
+          name: qemu-guest-agent.service
           enabled: true
           state: started
       rescue:
