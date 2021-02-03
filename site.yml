@@ -66,7 +66,7 @@
           msg: "{{ ansible_failed_task }} failed"
 
     - name: Install the base packages
-      command: pacstrap /mnt base linux linux-firmware syslinux openssh haveged python dhcpcd
+      command: pacstrap /mnt base linux linux-firmware syslinux openssh haveged python
 
     - name: generate fstab
       command: genfstab -U /mnt
@@ -126,14 +126,28 @@
     - name: enable haveged
       command: arch-chroot /mnt systemctl enable haveged
 
-    - name: configure dhcpcd
+    - name: configure default systemd-networkd
       copy:
-        dest: /mnt/etc/dhcpcd.conf
-        content: "{{ dhcpcd_content }}"
-      when: "dhcpcd_content|default('')|length > 2"
+        dest: /mnt/etc/systemd/network/20-wired.network
+        content: |
+          [Match]
+          Name=!lo
 
-    - name: enable dhcpcd
-      command: arch-chroot /mnt systemctl enable dhcpcd
+          [Network]
+          DHCP=yes
+      when: "networkd_content|default('')|length <= 2"
+
+    - name: configure custom systemd-networkd
+      copy:
+        dest: /mnt/etc/systemd/network/20-wired.network
+        content: "{{ networkd_content }}"
+      when: "networkd_content|default('')|length > 2"
+
+    - name: enable systemd-networkd
+      command: arch-chroot /mnt systemctl enable systemd-networkd
+
+    - name: enable systemd-resolved
+      command: arch-chroot /mnt systemctl enable systemd-resolved
 
     - name: configure bootloader
       replace:

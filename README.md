@@ -33,7 +33,7 @@ itself. But here the main steps:
 - create a ranked mirrorlist (country configurable, default 'DE')
 - bootstrap arch-linux (base, linux kernel, sshd and python for ansible)
 - enable remote ssh login for root (copy password and `authorized_keys` from live system)
-- Network stuff (`/etc/hostname`, `/etc/hosts`, `dhcpcd.service`)
+- Network stuff (`/etc/hostname`, `/etc/hosts`, `systemd-networkd`, `systemd-resolved`)
 - reboot into new installed arch linux
 - set LANG, generate locale and set timezone (defaults are 'en_US.UTF-8' and 'Europe/Berlin')
 - (optional) setup qemu-guest-agent

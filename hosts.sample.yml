@@ -1,0 +1,26 @@
+# sample inventory file for https://github.com/dtrv/ansible-play-install-arch-linux
+
+# host will reboot during deployment. if you boot archiso the hostname is 'archiso'. 
+# make sure it's accessable even if hostname changes! best is to use IP address.
+
+all:
+  hosts:
+    archiso: 
+      ansible_host: hosts ip address
+      hostname: your hostname
+      domain: your domain
+#     os_disk: sda                      # default 'vda'
+#     os_fstype: <FSTYPE>               # default 'ext4'
+#     timezone: <TIMEZONE>              # default 'Europe/Berlin'
+#     language_locale: <LOCALE>         # default 'en_US.UTF-8'
+#     mirrorlist_country: <ISO 3166-1>  # default 'DE'
+#     os_packages: <packages>           # default none, example: ["rsync", "unzip"]
+#     install_qemu_guest_agent: True    # default False
+#     # default network_content: configure all devices except lo via DHCP
+#     # see https://wiki.archlinux.org/index.php/systemd-networkd for configuration
+#     networkd_content: |
+#       [Match]
+#       Name=!lo
+#     
+#       [Network]
+#       DHCP=yes
