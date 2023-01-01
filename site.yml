@@ -3,17 +3,17 @@
 - hosts: archiso
 
   tasks:
-    - name: Update the system clock
+    - name: update the system clock
       command: timedatectl set-ntp true
 
-    - name: Partition the disks
+    - name: partition disks
       parted:
         device: "/dev/{{ os_disk|default('vda') }}"
         number: 1
         label: msdos
         state: present
 
-    - name: Format the partitions
+    - name: format partition
       filesystem:
         device: "/dev/{{ os_disk|default('vda') }}1"
         fstype: "{{ os_fstype|default('ext4') }}"
@@ -26,7 +26,7 @@
         fstype: "{{ os_fstype|default('ext4') }}"
         state: mounted
 
-    - name: Select the mirrors
+    - name: select mirrors
       block: 
       - name: install packages
         pacman:
@@ -64,6 +64,10 @@
       rescue:
       - fail:
           msg: "{{ ansible_failed_task }} failed"
+
+    - name: update keyring first
+      # bootet iso may have outdated keyrings. --noconfirm assumes default answer Y
+      command: pacman --noconfirm -Sy archlinux-keyring
 
     - name: Install the base packages
       command: pacstrap /mnt base linux linux-firmware syslinux openssh haveged python
@@ -161,18 +165,21 @@
     - reboot:
 
     - name: set LANG
+      tags: post_reboot
       become: true
       copy:
         dest: /etc/locale.conf
         content: "LANG={{ language_locale|default('en_US.UTF-8') }}"
 
     - name: generate locale
+      tags: post_reboot
       become: true
       locale_gen:
         name: "{{ language_locale|default('en_US.UTF-8') }}"
         state: present
 
     - name: set timezone
+      tags: post_reboot
       become: true
       file:
         state: link
@@ -181,11 +188,13 @@
         force: true
 
     - name: run pacman Syu | just to update cache
+      tags: post_reboot
       pacman:
         update_cache: yes
         upgrade: yes
 
     - name: setup qemu-guest-agent
+      tags: post_reboot
       when: install_qemu_guest_agent|default(false)|bool
       block:
       - name: install qemu-guest-agent
@@ -202,6 +211,7 @@
           msg: "{{ ansible_failed_task }} failed"
 
     - name: install packages
+      tags: post_reboot
       pacman:
         state: present
         name: "{{ os_packages }}"

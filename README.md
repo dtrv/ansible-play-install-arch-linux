@@ -21,7 +21,7 @@ where root can login via ssh.
 - set root's password using `passwd`
 - start ssh server with `systemctl start sshd`
 - (optional) copy your ssh key via `ssh-copy-id -i KEY root@target`
-- copy `hosts.sample` to `hosts` and adjust to your needs
+- copy `host.sample.yaml` to `host.yaml` and adjust to your needs
 - run `ansible-playbook site.yml` (add `-k` if you didn't copy your ssh key)
 
 

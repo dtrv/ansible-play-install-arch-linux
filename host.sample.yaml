@@ -1,7 +1,9 @@
 # sample inventory file for https://github.com/dtrv/ansible-play-install-arch-linux
 
 # host will reboot during deployment. if you boot archiso the hostname is 'archiso'. 
-# make sure it's accessable even if hostname changes! best is to use IP address.
+# make sure it's accessable even if hostname changes! best is to use a static mapped
+# IP address. if playbook stays after 'reboot host' you can adopt host.yaml and
+# re-start ansible with `--tags post_reboot`
 
 all:
   hosts:
