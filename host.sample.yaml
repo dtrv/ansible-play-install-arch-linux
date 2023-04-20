@@ -25,4 +25,7 @@ all:
 #       Name=!lo
 #     
 #       [Network]
-#       DHCP=yes
+#       DHCP=ipv4
+#
+#       [DHCPv4]
+#       UseDomains=tru

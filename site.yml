@@ -139,6 +139,9 @@
 
           [Network]
           DHCP=yes
+
+          [DHCPv4]
+          UseDomains=true
       when: "networkd_content|default('')|length <= 2"
 
     - name: configure custom systemd-networkd
