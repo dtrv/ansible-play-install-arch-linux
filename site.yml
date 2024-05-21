@@ -190,6 +190,14 @@
         src: "/usr/share/zoneinfo/{{ timezone|default('Europe/Berlin') }}"
         force: true
 
+    - name: link resolv.conf to systemd stub-resolv
+      become: true
+      file:
+        src: /run/systemd/resolve/stub-resolv.conf
+        path: /etc/resolv.conf
+        state: link
+        force: true
+
     - name: run pacman Syu | just to update cache
       tags: post_reboot
       pacman:
