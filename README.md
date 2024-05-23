@@ -14,16 +14,18 @@ a mostly clean system that works as target for further ansible deployments.
 ## Pre requirements
 You should have booted a [arch linux live system](https://www.archlinux.org/download/)
 where root can login via ssh.
+Ensure that the IP address doesn't change when rebooting; Or login and add the IP address from inventory.
 
 
 ## HowTo
 - boot [arch linux live system](https://www.archlinux.org/download/)
 - set root's password using `passwd`
+- check disk and ensure install partition has enough space
 - start ssh server with `systemctl start sshd`
-- (optional) copy your ssh key via `ssh-copy-id -i KEY root@target`
-- copy `host.sample.yaml` to `host.yaml` and adjust to your needs
+- (optional but recommended) copy your ssh key via `ssh-copy-id -i KEY root@target`
+- copy the inventory `host.sample.yaml` to `host.yaml` and adjust to your needs
 - run `ansible-playbook site.yml` (add `-k` if you didn't copy your ssh key)
-
+- hint: check and set known IP address if play hangs at 'reboot'
 
 ## Actions done by the playbook
 Best way get an idea of the tasks of the playbook is to read `site.yml`
